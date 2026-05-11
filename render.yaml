@@ -3,7 +3,7 @@ services:
     name: ab-test-analyzer
     runtime: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn --bind 0.0.0.0:$PORT --reuse-port Ab-Test-Analyzer:server
+    startCommand: gunicorn app:server
     envVars:
       - key: PYTHON_VERSION
         value: 3.12.0
