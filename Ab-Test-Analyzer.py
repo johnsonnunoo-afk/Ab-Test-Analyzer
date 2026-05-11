@@ -155,6 +155,7 @@ def detail_row(label, value):
 # ── App ───────────────────────────────────────────────────────────────────────
 
 app = dash.Dash(__name__, title="A/B Test Analyzer — Split Decision")
+server = app.server
 
 app.index_string = """<!DOCTYPE html>
 <html>
@@ -502,19 +503,19 @@ def update_all(va, ca, vb, cb, conf, ss_base, ss_lift):
     # rejection regions
     dist_fig.add_trace(go.Scatter(
         x=z_range[z_range <= -z_crit], y=y_norm[z_range <= -z_crit],
-        fill="tozeroy", fillcolor=f"{RED}30", line=dict(width=0),
+        fill="tozeroy", fillcolor="rgba(247,90,90,0.19)", line=dict(width=0),
         showlegend=False, hoverinfo="skip",
     ))
     dist_fig.add_trace(go.Scatter(
         x=z_range[z_range >= z_crit], y=y_norm[z_range >= z_crit],
-        fill="tozeroy", fillcolor=f"{RED}30", line=dict(width=0),
+        fill="tozeroy", fillcolor="rgba(247,90,90,0.19)", line=dict(width=0),
         showlegend=False, hoverinfo="skip",
     ))
     # normal curve
     dist_fig.add_trace(go.Scatter(
         x=z_range, y=y_norm,
         line=dict(color=BORDER, width=1.5),
-        fill="tozeroy", fillcolor=f"{ACCENT}10",
+        fill="tozeroy", fillcolor="rgba(79,142,247,0.06)",
         showlegend=False, hoverinfo="skip",
     ))
     # z-score line
@@ -524,7 +525,7 @@ def update_all(va, ca, vb, cb, conf, ss_base, ss_lift):
                        annotation_font_color=TEXT, annotation_font_size=10)
     # critical lines
     for xv in [-z_crit, z_crit]:
-        dist_fig.add_vline(x=xv, line_color=f"{RED}80", line_width=1, line_dash="dot")
+        dist_fig.add_vline(x=xv, line_color="rgba(247,90,90,0.50)", line_width=1, line_dash="dot")
 
     dist_fig.update_layout(
         paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
@@ -551,7 +552,7 @@ def update_all(va, ca, vb, cb, conf, ss_base, ss_lift):
         paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
         margin=dict(l=10, r=10, t=20, b=10),
         xaxis=dict(showgrid=False, tickfont=dict(color=MUTED, size=11)),
-        yaxis=dict(showgrid=True, gridcolor=f"{BORDER}66",
+        yaxis=dict(showgrid=True, gridcolor="rgba(31,37,53,0.40)",
                    tickfont=dict(color=MUTED, size=10), ticksuffix="%"),
         showlegend=False,
     )
@@ -595,4 +596,4 @@ def update_all(va, ca, vb, cb, conf, ss_base, ss_lift):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=8051)
+    app.run(debug=False, host="0.0.0.0", port=5000)
